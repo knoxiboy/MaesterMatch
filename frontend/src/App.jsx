@@ -7,6 +7,7 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import CreateJob from "./pages/CreateJob";
 import UploadResume from "./pages/UploadResume";
+import MatchResults from "./pages/MatchResults";
 import "./index.css";
 
 // A simple PrivateRoute wrapper
@@ -48,6 +49,14 @@ function App() {
             element={
               <PrivateRoute>
                 <UploadResume />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path="/matches/:jobId" 
+            element={
+              <PrivateRoute>
+                <MatchResults />
               </PrivateRoute>
             } 
           />
