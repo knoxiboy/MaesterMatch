@@ -1,632 +1,190 @@
 # Resume Parser & Matching Engine
 
-A full-stack MERN web application that helps recruiters automatically extract and analyze information from resumes, match candidates with job requirements using skill-based scoring, and rank candidates for quick shortlisting.
+A full-stack MERN application designed to automate and optimize the recruitment process. The system allows recruiters to upload candidate resumes (PDF/DOCX), automatically extracts structured data such as skills, education, and experience, and dynamically calculates a match score against predefined job requirements.
 
----
+## Features
 
-## Table of Contents
-
-- [Introduction](#introduction)
-- [Problem Statement](#problem-statement)
-- [User Scenario](#user-scenario)
-- [Architecture](#architecture)
-- [System Flow](#system-flow)
-- [User Flow](#user-flow)
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
-- [Database Schema](#database-schema)
-- [API Endpoints](#api-endpoints)
-- [Key Features](#key-features)
-- [Skill Matching Algorithm](#skill-matching-algorithm)
-- [Implementation Phases](#implementation-phases)
-- [Getting Started](#getting-started)
-- [Environment Variables](#environment-variables)
-- [Optional Advanced Features](#optional-advanced-features)
-- [Learning Outcomes](#learning-outcomes)
-- [Contributors](#contributors)
-
----
-
-## Introduction
-
-Recruiters often receive hundreds of resumes for a single job opening, making manual screening time-consuming and inefficient. This system allows recruiters to:
-
-- **Upload** candidate resumes (PDF / DOCX)
-- **Automatically extract** structured information — skills, education, and work experience
-- **Store** candidate data in a searchable MongoDB database
-- **Compare** candidate profiles with job descriptions
-- **Generate** a ranking score based on skill matching
-- **Shortlist** the most suitable candidates quickly
-
-The project demonstrates document parsing, automated candidate screening, skill matching algorithms, and full-stack MERN development.
-
----
-
-## Problem Statement
-
-| Challenge | How We Solve It |
-|---|---|
-| Difficulty extracting key information from resumes | Automated parsing with `pdf-parse` and `mammoth` |
-| Lack of structured candidate data | Extracted data stored in MongoDB collections |
-| Time-consuming manual screening | One-click skill matching engine |
-| Difficulty matching skills with job requirements | Algorithmic scoring and candidate ranking |
-
----
-
-## User Scenario
-
-> **Priya** is a recruiter hiring a **Java Full Stack Developer**.
->
-> 1. She uploads multiple candidate resumes to the system
-> 2. The system automatically extracts: Skills, Education, Work Experience
-> 3. Priya enters the job requirements: Java, Spring Boot, React, SQL
-> 4. The system compares candidate skills with job requirements
-> 5. Each candidate receives a **matching score** (0–100%)
-> 6. Priya views a **ranked list** and shortlists the best matches
-
----
-
-## Architecture
-
-The system follows a **three-tier architecture**:
-
-```
-┌─────────────────────────────────────────────────────┐
-│                   FRONTEND (React.js)               │
-│  Resume Upload • Candidate Dashboard • Job Form     │
-│  Match Results • Auth Pages                         │
-└──────────────────────┬──────────────────────────────┘
-                       │ Axios HTTP Requests
-                       ▼
-┌─────────────────────────────────────────────────────┐
-│               BACKEND (Node.js + Express.js)        │
-│  REST APIs • JWT Auth • Multer File Upload          │
-│  Resume Parser Service • Skill Matching Engine      │
-└──────────────────────┬──────────────────────────────┘
-                       │ Mongoose ODM
-                       ▼
-┌─────────────────────────────────────────────────────┐
-│                  DATABASE (MongoDB)                  │
-│  Users • Candidates • Jobs • Matches                │
-└─────────────────────────────────────────────────────┘
-```
-
----
-
-## System Flow
-
-```
-Step 1: Recruiter Registration
-  └─ Recruiter creates an account (name, email, password)
-
-Step 2: Authentication
-  └─ Login using email/password → JWT token issued
-
-Step 3: Resume Upload
-  └─ Upload PDF or DOCX → stored in /uploads via Multer
-
-Step 4: Resume Parsing
-  └─ pdf-parse / mammoth extracts raw text
-  └─ Parser service extracts: name, email, skills[], education[], experience[]
-
-Step 5: Data Storage
-  └─ Structured candidate data saved to MongoDB (Candidate collection)
-
-Step 6: Job Requirement Input
-  └─ Recruiter creates a job with title, description, and requiredSkills[]
-
-Step 7: Skill Matching Engine
-  └─ Compare candidate.skills[] vs job.requiredSkills[]
-  └─ Calculate match percentage → store in Match collection
-
-Step 8: Candidate Ranking
-  └─ Display candidates sorted by matchScore (descending)
-```
-
----
-
-## User Flow
-
-```
-Registration:   Recruiter → Sign Up → Account Created → Login
-Upload:         Recruiter → Upload Resume → System Extracts Data → Candidate Saved
-Job Input:      Recruiter → Create Job → Enter Required Skills
-Matching:       Recruiter → Run Matching → System Compares Skills → Scores Calculated
-Shortlisting:   Recruiter → View Ranked Candidates → Shortlist Top Matches
-```
-
----
+* **Resume Upload:** Process candidate resumes in PDF and DOCX formats.
+* **Automatic Data Extraction:** Extract name, email, phone, skills, education, and experience using structured rules.
+* **Secure Authentication:** Role-based access control for recruiters using JWT and Bcrypt.
+* **Job Creation:** Define roles and specific required skills for open positions.
+* **Dynamic Skill Matching Engine:** Calculate match scores in real-time based on job requirements.
+* **Candidate Ranking:** Automatically sort and rank candidates by their match score.
+* **Recruiter Dashboard:** Centralized view of active jobs, parsed profiles, and matching results.
 
 ## Tech Stack
 
-### Frontend
-| Technology | Purpose |
-|---|---|
-| React.js 18+ | UI framework |
-| React Router v6 | Client-side routing |
-| Axios | HTTP requests to backend |
-| Tailwind CSS | Styling |
-| React Context API | Auth state management |
+**Frontend:**
+* React.js
+* TailwindCSS
+* Axios
+* React Router DOM
 
-### Backend
-| Technology | Purpose |
-|---|---|
-| Node.js | Runtime |
-| Express.js | REST API framework |
-| JWT (jsonwebtoken) | Authentication tokens |
-| Bcrypt.js | Password hashing |
-| Multer | File upload handling |
-| pdf-parse | PDF text extraction |
-| mammoth | DOCX text extraction |
-| cors | Cross-origin resource sharing |
-| dotenv | Environment variables |
+**Backend:**
+* Node.js
+* Express.js
+* JWT Authentication
+* Bcrypt.js
+* Multer
 
-### Database
-| Technology | Purpose |
-|---|---|
-| MongoDB | Document database |
-| Mongoose | ODM for schema/model management |
+**Resume Parsing:**
+* pdf-parse
+* mammoth
+* Regex + keyword-based parsing
 
-### Development Tools
-| Tool | Purpose |
-|---|---|
-| VS Code | IDE |
-| Git + GitHub | Version control |
-| Postman / Thunder Client | API testing |
-| Nodemon | Auto-restart backend on changes |
-| Concurrently | Run frontend + backend simultaneously |
+**Database:**
+* MongoDB
+* Mongoose
 
----
+## Architecture
+
+The system follows a standard three-tier architecture:
+
+```text
+Frontend (React) -> HTTP/REST APIs -> Backend (Node/Express) -> Mongoose ODM -> Database (MongoDB)
+```
 
 ## Project Structure
 
-```
-FullStack Group Project/
-│
+```text
+root/
 ├── backend/
-│   ├── config/
-│   │   └── db.js                    # MongoDB connection setup
-│   │
 │   ├── controllers/
-│   │   ├── authController.js        # Signup, login, profile
-│   │   ├── resumeController.js      # Upload, parse, list candidates
-│   │   ├── jobController.js         # CRUD for job descriptions
-│   │   └── matchController.js       # Run matching, get rankings
-│   │
 │   ├── middleware/
-│   │   └── authMiddleware.js        # JWT verification middleware
-│   │
 │   ├── models/
-│   │   ├── User.js                  # User schema (recruiter/admin)
-│   │   ├── Candidate.js             # Candidate schema (parsed resume data)
-│   │   ├── Job.js                   # Job schema (title, requiredSkills)
-│   │   └── Match.js                 # Match schema (candidateId, jobId, score)
-│   │
 │   ├── routes/
-│   │   ├── authRoutes.js            # POST /signup, POST /login
-│   │   ├── resumeRoutes.js          # POST /upload, GET /candidates
-│   │   ├── jobRoutes.js             # CRUD /jobs
-│   │   └── matchRoutes.js           # POST /match, GET /rankings/:jobId
-│   │
 │   ├── services/
-│   │   ├── resumeParser.js          # Core: text → structured data extraction
-│   │   └── matchingEngine.js        # Core: skill comparison algorithm
-│   │
-│   ├── uploads/                     # Multer file storage directory
-│   │
-│   ├── utils/
-│   │   └── helpers.js               # Shared utility functions
-│   │
-│   ├── .env                         # Environment variables (DO NOT COMMIT)
-│   ├── package.json
-│   └── server.js                    # Express app entry point
-│
+│   ├── uploads/
+│   └── server.js
 ├── frontend/
-│   ├── public/
-│   │   ├── icons/                   # SVG icons
-│   │   └── images/                  # Static images
-│   │
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── auth/
-│   │   │   │   ├── LoginForm.jsx        # Login form component
-│   │   │   │   └── SignupForm.jsx       # Signup form component
-│   │   │   ├── common/
-│   │   │   │   ├── Navbar.jsx           # Navigation bar
-│   │   │   │   ├── Footer.jsx           # Footer
-│   │   │   │   ├── FileUploader.jsx     # Drag & drop file uploader
-│   │   │   │   ├── ScoreCircle.jsx      # Circular score display
-│   │   │   │   ├── ScoreGauge.jsx       # Gauge score visualization
-│   │   │   │   ├── ScoreBadge.jsx       # Score pill/badge
-│   │   │   │   ├── Accordion.jsx        # Expandable sections
-│   │   │   │   ├── LoadingSpinner.jsx   # Loading indicator
-│   │   │   │   └── ProtectedRoute.jsx   # Auth guard wrapper
-│   │   │   ├── candidates/
-│   │   │   │   ├── CandidateCard.jsx    # Candidate summary card
-│   │   │   │   └── CandidateList.jsx    # List of parsed candidates
-│   │   │   ├── jobs/
-│   │   │   │   ├── JobCard.jsx          # Job summary card
-│   │   │   │   └── JobForm.jsx          # Create/edit job form
-│   │   │   └── matching/
-│   │   │       ├── RankingTable.jsx     # Ranked candidates table
-│   │   │       └── MatchSummary.jsx     # Match score summary
-│   │   │
-│   │   ├── pages/
-│   │   │   ├── LoginPage.jsx            # Login page
-│   │   │   ├── SignupPage.jsx           # Signup page
-│   │   │   ├── DashboardPage.jsx        # Main recruiter dashboard
-│   │   │   ├── UploadResumePage.jsx     # Resume upload page
-│   │   │   ├── CandidatesPage.jsx       # All candidates list
-│   │   │   ├── CandidateDetailPage.jsx  # Single candidate detail view
-│   │   │   ├── JobsPage.jsx             # All jobs list
-│   │   │   ├── CreateJobPage.jsx        # Create new job
-│   │   │   └── MatchResultsPage.jsx     # Ranked results for a job
-│   │   │
-│   │   ├── services/
-│   │   │   └── api.js                   # Axios instance + API functions
-│   │   │
 │   │   ├── context/
-│   │   │   └── AuthContext.jsx          # Authentication context provider
-│   │   │
-│   │   ├── hooks/
-│   │   │   └── useAuth.js              # Custom auth hook
-│   │   │
-│   │   ├── utils/
-│   │   │   └── helpers.js              # Frontend utility functions
-│   │   │
-│   │   ├── styles/
-│   │   │   └── index.css               # Global styles / Tailwind imports
-│   │   │
-│   │   ├── App.jsx                     # Root component with routes
-│   │   └── main.jsx                    # ReactDOM entry point
-│   │
-│   └── package.json
-│
-├── .gitignore
-└── README.md                           # ← You are here
+│   │   ├── pages/
+│   │   ├── App.jsx
+│   │   └── main.jsx
 ```
 
----
+## Authentication Flow
 
-## Database Schema
+The application utilizes stateless JWT-based authentication for secure access.
 
-### Users Collection
+1. **Signup/Login:** User provides credentials which are hashed via Bcrypt and stored/verified in MongoDB.
+2. **Token Generation:** Upon successful authentication, the server generates a JSON Web Token (JWT).
+3. **Storage:** The frontend stores the JWT in local storage.
+4. **Protected Routes:** The backend `authMiddleware` intercepts incoming requests, verifies the JWT signature, decodes the token, and attaches the full user profile to the request object to authorize recruiter actions.
 
-```javascript
-{
-  _id: ObjectId,
-  username: String,          // required, unique
-  email: String,             // required, unique
-  password: String,          // required, hashed with bcrypt
-  role: String,              // "recruiter" | "admin", default: "recruiter"
-  createdAt: Date            // auto-generated
-}
+## Resume Parsing Engine
+
+The core parsing engine is entirely rule-based, designed to extract structured information from unstructured text without relying on external AI models.
+
+* **Text Extraction:** Utilizes `pdf-parse` for PDF files and `mammoth` for DOCX files to extract raw textual data.
+* **Pattern Matching:** Employs precise Regular Expressions (Regex) to reliably isolate email addresses and phone numbers.
+* **Keyword Detection:** Scans the extracted text against a predefined `SKILLS_DATABASE`. It utilizes word-boundary regex (`\b`) to ensure accurate extraction and prevent partial word matches (false positives).
+* **Section Mapping:** Identifies standard resume headers (e.g., "Experience", "Education") to break the document into parsable segments.
+
+## Matching Algorithm
+
+The system employs a dynamic matching engine. Candidate match scores are not statically stored in the database; instead, they are calculated in real-time when a recruiter requests to view matches for a specific job.
+
+The logic intersects the candidate's parsed skills with the job's required skills.
+
+```text
+Match Score = (Matched Skills / Required Skills) × 100
 ```
 
-### Candidates Collection
+*Example: If a job requires 4 skills and the candidate possesses 3 of them, their match score is calculated as 75%.*
 
-```javascript
-{
-  _id: ObjectId,
-  name: String,              // extracted from resume
-  email: String,             // extracted from resume
-  phone: String,             // extracted from resume
-  skills: [String],          // ["Java", "React", "SQL", ...]
-  education: [{
-    degree: String,          // "B.Tech Computer Science"
-    institution: String,     // "IIT Delhi"
-    year: String             // "2020"
-  }],
-  experience: [{
-    title: String,           // "Software Engineer"
-    company: String,         // "Google"
-    duration: String,        // "2 years"
-    description: String      // role summary
-  }],
-  resumeFile: String,        // file path in /uploads
-  rawText: String,           // full extracted text (for re-parsing)
-  uploadedBy: ObjectId,      // ref → Users
-  createdAt: Date
-}
-```
+## Workflow
 
-### Jobs Collection
+1. **Authentication:** Recruiter registers or logs into the platform.
+2. **Job Definition:** Recruiter creates a new job posting, defining the title and required skills.
+3. **Data Ingestion:** Recruiter uploads a candidate's resume (PDF/DOCX) via the dashboard.
+4. **Parsing:** The backend extracts the text, identifies key data points, and stores the structured candidate profile.
+5. **Evaluation:** Recruiter opens the job matching view.
+6. **Ranking:** The system calculates real-time match scores and displays a sorted list of the most qualified candidates.
 
-```javascript
-{
-  _id: ObjectId,
-  title: String,             // "Java Full Stack Developer"
-  description: String,       // full job description text
-  requiredSkills: [String],  // ["Java", "Spring Boot", "React", "SQL"]
-  createdBy: ObjectId,       // ref → Users
-  createdAt: Date
-}
-```
+## Installation Guide
 
-### Matches Collection
+### Prerequisites
+* Node.js installed
+* MongoDB installed and running locally (or a MongoDB Atlas URI)
 
-```javascript
-{
-  _id: ObjectId,
-  candidateId: ObjectId,     // ref → Candidates
-  jobId: ObjectId,           // ref → Jobs
-  matchScore: Number,        // 0–100 percentage
-  matchedSkills: [String],   // skills that matched
-  missingSkills: [String],   // required skills candidate lacks
-  createdAt: Date
-}
-```
+### Backend Setup
 
-### ER Relationships
+1. Navigate to the backend directory:
+   ```bash
+   cd backend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Create a `.env` file in the `backend` directory:
+   ```env
+   PORT=5000
+   MONGODB_URI=mongodb://localhost:27017/resume-parser
+   JWT_SECRET=your_secure_jwt_secret
+   JWT_EXPIRE=7d
+   ```
+4. Start the backend server:
+   ```bash
+   npm run dev
+   ```
 
-```
-Users ──(1:N)──▶ Candidates   (a recruiter uploads many candidates)
-Users ──(1:N)──▶ Jobs          (a recruiter creates many jobs)
-Candidates ──(N:M)──▶ Jobs     (via Matches join collection)
-```
+### Frontend Setup
 
----
+1. Navigate to the frontend directory:
+   ```bash
+   cd frontend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Create a `.env` file in the `frontend` directory:
+   ```env
+   VITE_API_URL=http://localhost:5000/api
+   ```
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
 ## API Endpoints
 
-### Auth Routes — `/api/auth`
-
-| Method | Endpoint | Description | Auth |
-|---|---|---|---|
+| HTTP Method | Endpoint | Description | Auth Required |
+| :--- | :--- | :--- | :--- |
 | POST | `/api/auth/signup` | Register a new recruiter | No |
-| POST | `/api/auth/login` | Login, returns JWT token | No |
+| POST | `/api/auth/login` | Authenticate recruiter and return JWT | No |
 | GET | `/api/auth/profile` | Get current user profile | Yes |
+| POST | `/api/jobs` | Create a new job requirement | Yes |
+| GET | `/api/jobs` | Get all jobs created by recruiter | Yes |
+| POST | `/api/resumes/upload` | Upload and parse a candidate resume | Yes |
+| GET | `/api/resumes/candidates` | Get all parsed candidates | Yes |
+| GET | `/api/matches/:jobId` | Calculate and return ranked candidates | Yes |
 
-### Resume Routes — `/api/resumes`
+## Key Highlights
 
-| Method | Endpoint | Description | Auth |
-|---|---|---|---|
-| POST | `/api/resumes/upload` | Upload & parse a resume file | Yes |
-| GET | `/api/resumes/candidates` | List all parsed candidates | Yes |
-| GET | `/api/resumes/candidates/:id` | Get single candidate detail | Yes |
-| DELETE | `/api/resumes/candidates/:id` | Delete a candidate | Yes |
+* **Dynamic Calculation:** Calculating match scores in real-time ensures that if a job's requirements are edited, match scores remain instantly accurate without requiring redundant database updates.
+* **Heuristic Reliability:** Word-boundary keyword parsing ensures lightweight, deterministic extraction of technical skills.
+* **Separation of Concerns:** Clean MVC backend architecture alongside modular React context state management.
 
-### Job Routes — `/api/jobs`
+## Limitations
 
-| Method | Endpoint | Description | Auth |
-|---|---|---|---|
-| POST | `/api/jobs` | Create a new job description | Yes |
-| GET | `/api/jobs` | List all jobs | Yes |
-| GET | `/api/jobs/:id` | Get single job detail | Yes |
-| PUT | `/api/jobs/:id` | Update a job | Yes |
-| DELETE | `/api/jobs/:id` | Delete a job | Yes |
+* **Static Skill Database:** The system currently relies on a hardcoded array of skills. It will not identify niche or misspelled skills that are not present in the predefined database.
+* **Format Dependency:** Parsing accuracy is highly dependent on standard resume formatting. Unconventional layouts or image-based PDFs may yield lower extraction accuracy.
 
-### Match Routes — `/api/matches`
+## Future Improvements
 
-| Method | Endpoint | Description | Auth |
-|---|---|---|---|
-| POST | `/api/matches/run/:jobId` | Run matching for all candidates against a job | Yes |
-| GET | `/api/matches/rankings/:jobId` | Get ranked candidates for a job | Yes |
-| GET | `/api/matches/candidate/:candidateId` | Get all match results for a candidate | Yes |
+* **Database-driven Skill Dictionary:** Move the static skill array into a MongoDB collection to allow recruiters to dynamically add or update industry-specific keywords.
+* **OCR Support:** Implement optical character recognition (e.g., Tesseract.js) to parse scanned or image-heavy PDFs.
+* **Export Functionality:** Allow recruiters to export the ranked list of candidates to CSV or Excel.
 
----
+## Author
 
-## Key Features
-
-### 1. Authentication
-- Recruiter signup with email and password
-- Secure login with JWT token generation
-- Protected routes requiring valid token
-- Password hashing with bcrypt (10 salt rounds)
-
-### 2. Resume Upload
-- Accept PDF and DOCX file formats
-- Server-side file storage via Multer
-- Max file size: 5MB
-- Drag-and-drop UI with file preview
-
-### 3. Resume Parsing
-- **PDF parsing** using `pdf-parse` library
-- **DOCX parsing** using `mammoth` library
-- Extract structured data from raw text:
-  - Candidate name and contact information
-  - Skills array (matched against a skills dictionary)
-  - Education details (degree, institution, year)
-  - Work experience (title, company, duration)
-
-### 4. Skill Matching Engine
-- Compare `candidate.skills[]` against `job.requiredSkills[]`
-- Calculate match percentage: `(matched / total_required) × 100`
-- Track matched and missing skills per candidate
-- Store results in Matches collection
-
-### 5. Candidate Ranking
-- Sort candidates by `matchScore` (highest first)
-- Display in a ranked table with score visualization
-- Color-coded scores: green (≥85), blue (≥70), yellow (≥50), red (<50)
-- Quick shortlisting capabilities
-
----
-
-## Skill Matching Algorithm
-
-```
-FUNCTION calculateMatchScore(candidateSkills, requiredSkills):
-    normalize all skills to lowercase and trim whitespace
-
-    matchedCount = 0
-    matchedSkills = []
-    missingSkills = []
-
-    FOR EACH skill IN requiredSkills:
-        IF skill EXISTS IN candidateSkills:
-            matchedCount += 1
-            ADD skill TO matchedSkills
-        ELSE:
-            ADD skill TO missingSkills
-
-    matchScore = ROUND((matchedCount / LENGTH(requiredSkills)) × 100)
-
-    RETURN {
-        matchScore,        // 0–100
-        matchedSkills,     // skills that matched
-        missingSkills,     // skills candidate is missing
-        totalRequired: LENGTH(requiredSkills)
-    }
-```
-
-### Score Interpretation
-
-| Score Range | Label | Color |
-|---|---|---|
-| 85 – 100 | Excellent Match | 🟢 Green |
-| 70 – 84 | Strong Match | 🔵 Blue |
-| 50 – 69 | Partial Match | 🟡 Yellow |
-| 0 – 49 | Weak Match | 🔴 Red |
-
----
-
-## Implementation Phases
-
-### Phase 1: Project Setup & Auth
-- Initialize backend with Express.js
-- MongoDB connection with Mongoose
-- User model + JWT auth (signup/login)
-- Auth middleware for protected routes
-- Initialize React frontend with Vite
-- Login and Signup pages with AuthContext
-
-### Phase 2: Resume Upload & Parsing
-- Multer file upload endpoint
-- `pdf-parse` and `mammoth` text extraction on the backend
-- Resume parser service (regex/keyword-based skill, education, experience extraction)
-- Candidate model and CRUD APIs
-- Upload page UI with drag-and-drop
-
-### Phase 3: Job Management
-- Job model and CRUD APIs
-- Job creation form page
-- Job listing page with cards
-
-### Phase 4: Matching Engine & Ranking
-- Skill matching algorithm in `matchingEngine.js`
-- Match calculation endpoint (`POST /api/matches/run/:jobId`)
-- Match model and storage
-- Candidate ranking endpoint sorted by score
-- Match results page with ranked table
-
-### Phase 5: Dashboard & Polish
-- Recruiter dashboard with overview stats
-- Candidate detail view with full parsed data
-- Score visualizations (ScoreCircle, ScoreGauge)
-- Loading states, error handling, form validation
-- Responsive design
-
-### Phase 6: Finalization
-- Input sanitization and security
-- API error handling middleware
-- SEO meta tags
-- Final testing with Postman
-- Documentation and deployment prep
-
----
-
-## Getting Started
-
-### Prerequisites
-- Node.js v18+
-- MongoDB (local or Atlas)
-- Git
-
-### Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/<your-username>/FullStack-Group-Project.git
-cd FullStack-Group-Project
-
-# Install backend dependencies
-cd backend
-npm install
-
-# Install frontend dependencies
-cd ../frontend
-npm install
-```
-
-### Running the Application
-
-```bash
-# Terminal 1 — Start backend
-cd backend
-npm run dev
-
-# Terminal 2 — Start frontend
-cd frontend
-npm run dev
-```
-
----
-
-## Environment Variables
-
-### Backend (`backend/.env`)
-
-```env
-PORT=5000
-MONGODB_URI=mongodb://localhost:27017/resume-parser
-JWT_SECRET=your_jwt_secret_key_here
-JWT_EXPIRE=7d
-```
-
-### Frontend (`frontend/.env`)
-
-```env
-VITE_API_URL=http://localhost:5000/api
-```
-
-> ⚠️ **Never commit `.env` files.** They are listed in `.gitignore`.
-
----
-
-## Optional Advanced Features
-
-These can be added after the core system is complete:
-
-- [ ] AI-based resume analysis (using Gemini / OpenAI API)
-- [ ] Resume keyword highlighting
-- [ ] Candidate profile dashboard with analytics
-- [ ] Automatic email notifications for shortlisted candidates
-- [ ] Resume similarity detection between candidates
-- [ ] Machine learning–based skill matching with synonym support
-- [ ] Bulk resume upload (multiple files at once)
-- [ ] Export rankings to CSV / PDF
-- [ ] Admin panel for user management
-
----
-
-## Learning Outcomes
-
-By completing this project, the team will learn:
-
-- Full-stack **MERN** application development
-- Document parsing and text extraction
-- Skill matching algorithms and scoring
-- File upload and server-side processing
-- REST API design and development
-- MongoDB schema design with references
-- JWT authentication and route protection
-- React component architecture and state management
-- Responsive UI design with Tailwind CSS
-
----
-
-## Contributors
-
-| Name | Role | Responsibilities |
-|---|---|---|
-| | Backend Lead | Express APIs, MongoDB models, Auth |
-| | Frontend Lead | React pages, components, routing |
-| | Parser & Matching | Resume parser service, matching engine |
-| | UI/UX & Integration | Styling, API integration, testing |
-
----
+Karan Mani Tripathi and Team
 
 ## License
 
-This project is for educational purposes as part of a Full Stack Development course.
+This project is open-source and available under the ISC License.
