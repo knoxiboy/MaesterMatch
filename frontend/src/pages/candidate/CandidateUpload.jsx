@@ -77,7 +77,10 @@ const CandidateUpload = () => {
               <span className="text-lg font-semibold mb-1">
                 {file ? file.name : "Click to upload or drag and drop"}
               </span>
-              <span className="text-sm text-gray-500">PDF, DOCX (Max 5MB)</span>
+              <div className="flex gap-3 mt-4">
+                <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-md text-xs text-gray-400 font-bold uppercase tracking-widest">PDF</span>
+                <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-md text-xs text-gray-400 font-bold uppercase tracking-widest">DOCX</span>
+              </div>
               <input 
                 id="resume-upload"
                 type="file" 
