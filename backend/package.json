@@ -1,7 +1,7 @@
 {
-  "name": "resume-parser-backend",
+  "name": "maestermatch-backend",
   "version": "1.0.0",
-  "description": "Backend API for Resume Parser & Matching Engine",
+  "description": "Backend API for MaesterMatch",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

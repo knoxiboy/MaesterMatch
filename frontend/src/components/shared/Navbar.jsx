@@ -17,7 +17,7 @@ const Navbar = () => {
           <div className="size-8 rounded-xl bg-linear-to-br from-primary-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-primary-500/20">
             <svg className="size-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3l1.912 5.813h6.112l-4.944 3.592 1.888 5.795-4.968-3.592-4.968 3.592 1.888-5.795-4.944-3.592h6.112z"/></svg>
           </div>
-          <span className="text-white font-black tracking-tighter text-lg group-hover:text-primary-400 transition-colors">ATS<span className="text-primary-500">PRO</span></span>
+          <span className="text-white font-black tracking-tighter text-lg group-hover:text-primary-400 transition-colors">Maester<span className="text-primary-500">Match</span></span>
         </Link>
 
         <div className="h-6 w-px bg-white/10 mx-2" />

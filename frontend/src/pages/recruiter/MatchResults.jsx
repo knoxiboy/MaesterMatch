@@ -36,7 +36,7 @@ const MatchResults = () => {
         setRequiredSkills(res.data.requiredSkills);
       } catch (err) {
         console.error("Error fetching matches", err);
-        setError("Failed to synchronize with matching engine.");
+        setError("Failed to synchronize with MaesterMatch engine.");
       } finally {
         setLoading(false);
       }
@@ -50,7 +50,7 @@ const MatchResults = () => {
       <div className="min-h-screen flex items-center justify-center bg-dark-950">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="size-12 text-indigo-500 animate-spin" />
-          <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">AI Matching Engine Initializing...</p>
+          <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">MaesterMatch Engine Initializing...</p>
         </div>
       </div>
     );

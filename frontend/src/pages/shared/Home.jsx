@@ -21,7 +21,7 @@ const Home = () => {
           </div>
 
           <h1 className="text-7xl md:text-8xl font-black text-white tracking-tighter leading-[0.9]">
-            Hire Smarter with <span className="text-gradient">AI.</span>
+            Hire Smarter with <span className="text-gradient">MaesterMatch.</span>
           </h1>
           
           <p className="text-gray-400 text-xl font-medium max-w-xl leading-relaxed">
@@ -88,7 +88,7 @@ const Home = () => {
                   <div key={i} className="size-8 rounded-full border-2 border-dark-900 bg-dark-800" />
                 ))}
               </div>
-              <span className="text-primary-400 text-[10px] font-black uppercase tracking-widest">Matched by AI engine</span>
+              <span className="text-primary-400 text-[10px] font-black uppercase tracking-widest">Matched by MaesterMatch engine</span>
             </div>
           </div>
 

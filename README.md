@@ -4,7 +4,7 @@ A full-stack MERN application designed to automate and optimize the recruitment 
 
 ## Features
 
-* **Resume Upload & ATS Analysis:** Candidates can upload resumes (PDF/DOCX) for real-time ATS scoring and feedback.
+* **Resume Upload & MaesterMatch Analysis:** Candidates can upload resumes (PDF/DOCX) for real-time analysis and feedback.
 * **Recruiter & Candidate Portals:** Distinct dashboards for different user roles with tailored functionality.
 * **Automatic Data Extraction:** Extract name, email, phone, skills, education, and experience using structured rules.
 * **Role-Based Authentication:** Secure access control using JWT and Bcrypt, with automated redirection based on user role.
@@ -31,15 +31,15 @@ graph LR
     WebServer --> ApplicantPortal[Applicant Portal]
     
     ApplicantPortal --> APIGateway1[API Gateway]
-    APIGateway1 -- Upload Resume --> ResumeParserService[Resume Parser Service]
-    ResumeParserService <--> ExtractionEngine[Extraction Engine]
-    ResumeParserService --> CandidateDatabase[(Candidate Database)]
+    APIGateway1 -- Upload Resume --> MaesterMatchService[MaesterMatch Service]
+    MaesterMatchService <--> ExtractionEngine[Extraction Engine]
+    MaesterMatchService --> CandidateDatabase[(Candidate Database)]
     CandidateDatabase --> SkillsExtractor[Skills Extractor]
     CandidateDatabase --> EducationHistoryService[Education & History Service]
     CandidateDatabase --> ProfileBuilderService[Profile Builder Service]
     
     RecruiterPortal --> APIGateway2[API Gateway]
-    APIGateway2 -- Job Opening Input --> MatchingEngine[Matching Engine]
+    APIGateway2 -- Job Opening Input --> MaesterMatchEngine[MaesterMatch Engine]
     MatchingEngine <--> SkillBasedScoring[Skill-based Scoring]
     MatchingEngine --> ShortlistedCandidates[Shortlisted Candidates & Rankings]
     ShortlistedCandidates --> RecruiterPortal
@@ -215,7 +215,7 @@ Match Score = (Matched Skills / Required Skills) × 100
 3. Create a `.env` file in the `backend` directory:
    ```env
    PORT=5000
-   MONGODB_URI=mongodb://localhost:27017/resume-parser
+   MONGODB_URI=mongodb://localhost:27017/maestermatch
    JWT_SECRET=your_secure_jwt_secret
    JWT_EXPIRE=7d
    ```
