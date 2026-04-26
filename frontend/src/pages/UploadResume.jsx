@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const UploadResume = () => {
-  const [file, setFile] = null; // We'll store the actual file object
+  const [file, setFile] = useState(null); // We'll store the actual file object
   const [fileInputState, setFileInputState] = useState(""); // Used to clear the input
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
