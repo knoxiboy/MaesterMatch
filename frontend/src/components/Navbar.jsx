@@ -19,11 +19,21 @@ const Navbar = () => {
         <div className="nav-links">
           {user ? (
             <>
-              <Link to="/dashboard" className="nav-link">
+              <Link 
+                to={user.role === "candidate" ? "/candidate-dashboard" : "/dashboard"} 
+                className="nav-link"
+              >
                 Dashboard
               </Link>
+              {user.role === "candidate" && (
+                <Link to="/candidate/upload" className="nav-link">
+                  Scan Resume
+                </Link>
+              )}
               <div className="flex items-center gap-4">
-                <span className="text-muted">Hello, {user.username}</span>
+                <span className="text-muted text-sm hidden md:block">
+                  {user.username} ({user.role})
+                </span>
                 <button onClick={handleLogout} className="btn btn-outline" style={{ padding: '0.4rem 1rem', fontSize: '0.9rem' }}>
                   Logout
                 </button>

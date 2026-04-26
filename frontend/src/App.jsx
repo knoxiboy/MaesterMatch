@@ -8,15 +8,23 @@ import Dashboard from "./pages/Dashboard";
 import CreateJob from "./pages/CreateJob";
 import UploadResume from "./pages/UploadResume";
 import MatchResults from "./pages/MatchResults";
+import CandidateDashboard from "./pages/candidate/CandidateDashboard";
+import CandidateUpload from "./pages/candidate/CandidateUpload";
+import AnalysisReport from "./pages/candidate/AnalysisReport";
 import "./index.css";
 
 // A simple PrivateRoute wrapper
-const PrivateRoute = ({ children }) => {
+const PrivateRoute = ({ children, allowedRoles }) => {
   const { user, loading } = useAuth();
   
   if (loading) return <div>Loading...</div>;
+  if (!user) return <Navigate to="/login" />;
   
-  return user ? children : <Navigate to="/login" />;
+  if (allowedRoles && !allowedRoles.includes(user.role)) {
+    return <Navigate to={user.role === "candidate" ? "/candidate-dashboard" : "/dashboard"} />;
+  }
+  
+  return children;
 };
 
 function App() {
@@ -31,7 +39,7 @@ function App() {
           <Route 
             path="/dashboard" 
             element={
-              <PrivateRoute>
+              <PrivateRoute allowedRoles={["recruiter"]}>
                 <Dashboard />
               </PrivateRoute>
             } 
@@ -39,7 +47,7 @@ function App() {
           <Route 
             path="/jobs/new" 
             element={
-              <PrivateRoute>
+              <PrivateRoute allowedRoles={["recruiter"]}>
                 <CreateJob />
               </PrivateRoute>
             } 
@@ -47,7 +55,7 @@ function App() {
           <Route 
             path="/upload" 
             element={
-              <PrivateRoute>
+              <PrivateRoute allowedRoles={["recruiter"]}>
                 <UploadResume />
               </PrivateRoute>
             } 
@@ -55,8 +63,33 @@ function App() {
           <Route 
             path="/matches/:jobId" 
             element={
-              <PrivateRoute>
+              <PrivateRoute allowedRoles={["recruiter"]}>
                 <MatchResults />
+              </PrivateRoute>
+            } 
+          />
+          {/* Candidate Routes */}
+          <Route 
+            path="/candidate-dashboard" 
+            element={
+              <PrivateRoute allowedRoles={["candidate"]}>
+                <CandidateDashboard />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path="/candidate/upload" 
+            element={
+              <PrivateRoute allowedRoles={["candidate"]}>
+                <CandidateUpload />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path="/candidate/analysis/:id" 
+            element={
+              <PrivateRoute allowedRoles={["candidate"]}>
+                <AnalysisReport />
               </PrivateRoute>
             } 
           />
