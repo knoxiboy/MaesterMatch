@@ -1,4 +1,4 @@
-# Resume Parser & Matching Engine
+# MaesterMatch
 
 A full-stack MERN application designed to automate and optimize the recruitment process. The system allows recruiters to upload candidate resumes (PDF/DOCX), automatically extracts structured data such as skills, education, and experience, and dynamically calculates a match score against predefined job requirements.
 
