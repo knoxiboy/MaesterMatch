@@ -4,8 +4,8 @@
 
 const express = require("express");
 const router = express.Router();
-const { signup, login, getProfile } = require("../controllers/authController");
-const authMiddleware = require("../middleware/authMiddleware");
+const { signup, login, getProfile } = require("../../controllers/shared/authController");
+const authMiddleware = require("../../middleware/authMiddleware");
 
 // POST /api/auth/signup - Register a new user
 // No authentication needed (anyone can create an account)

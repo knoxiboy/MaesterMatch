@@ -4,8 +4,8 @@
 
 const path = require("path");
 const multer = require("multer");
-const Candidate = require("../models/Candidate");
-const { parseResume } = require("../services/resumeParser");
+const Candidate = require("../../models/recruiter/Candidate");
+const { parseResume } = require("../../services/recruiter/resumeParser");
 
 // --- MULTER CONFIGURATION ---
 // Multer is a middleware for handling file uploads in Express.
@@ -14,7 +14,7 @@ const { parseResume } = require("../services/resumeParser");
 const storage = multer.diskStorage({
   // Set the destination folder for uploaded files
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "../uploads"));
+    cb(null, path.join(__dirname, "../../uploads"));
   },
 
   // Generate a unique file name to avoid collisions

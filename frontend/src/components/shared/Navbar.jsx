@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -20,7 +20,7 @@ const Navbar = () => {
           {user ? (
             <>
               <Link 
-                to={user.role === "candidate" ? "/candidate-dashboard" : "/dashboard"} 
+                to={user.role === "candidate" ? "/candidate/dashboard" : "/dashboard"} 
                 className="nav-link"
               >
                 Dashboard

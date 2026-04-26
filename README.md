@@ -135,21 +135,33 @@ flowchart TD
 ```text
 root/
 ├── backend/
-│   ├── controllers/      # Route controllers (auth, jobs, resumes, matching)
+│   ├── controllers/
+│   │   ├── candidate/    # Candidate specific controllers (Analysis)
+│   │   ├── recruiter/    # Recruiter specific controllers (Jobs, Resumes, Matching)
+│   │   └── authController.js # Shared auth controller
 │   ├── middleware/       # JWT auth and Multer upload middlewares
-│   ├── models/           # Mongoose schemas (User, Job, Candidate)
-│   ├── routes/           # Express API routes
-│   ├── services/         # Core parsing and text extraction logic
-│   ├── uploads/          # Temporary storage for uploaded resumes
+│   ├── models/
+│   │   ├── candidate/    # ResumeAnalysis schema
+│   │   ├── recruiter/    # Job, Candidate (parsed) schemas
+│   │   └── User.js       # Shared User schema
+│   ├── routes/
+│   │   ├── candidate/    # Candidate API routes
+│   │   ├── recruiter/    # Recruiter API routes
+│   │   └── authRoutes.js # Shared auth routes
+│   ├── services/
+│   │   ├── candidate/    # Candidate analysis services
+│   │   └── recruiter/    # Recruiter parsing services
+│   ├── uploads/          # Storage for uploaded resumes
 │   └── server.js         # Entry point for backend
 ├── frontend/
-│   ├── public/
-│   │   ├── icons/        # SVG Icons
-│   │   └── images/       # Static Images
 │   ├── src/
-│   │   ├── components/   # Reusable UI components
+│   │   ├── components/
+│   │   │   ├── shared/   # Navbar and common components
 │   │   ├── context/      # React AuthContext
-│   │   ├── pages/        # Main route views (Dashboard, Login, Upload)
+│   │   ├── pages/
+│   │   │   ├── candidate/# Candidate Dashboard, Upload, Analysis
+│   │   │   ├── recruiter/# Recruiter Dashboard, Create Job, Matches
+│   │   │   └── shared/   # Home, Login, Signup
 │   │   ├── App.jsx       # React Router setup
 │   │   └── main.jsx      # React DOM rendering
 ```
@@ -235,14 +247,19 @@ Match Score = (Matched Skills / Required Skills) × 100
 
 | HTTP Method | Endpoint | Description | Auth Required |
 | :--- | :--- | :--- | :--- |
-| POST | `/api/auth/signup` | Register a new recruiter | No |
-| POST | `/api/auth/login` | Authenticate recruiter and return JWT | No |
+| POST | `/api/auth/signup` | Register a new user | No |
+| POST | `/api/auth/login` | Authenticate and return JWT | No |
 | GET | `/api/auth/profile` | Get current user profile | Yes |
+| **Recruiter Routes** | | | |
 | POST | `/api/jobs` | Create a new job requirement | Yes |
 | GET | `/api/jobs` | Get all jobs created by recruiter | Yes |
 | POST | `/api/resumes/upload` | Upload and parse a candidate resume | Yes |
 | GET | `/api/resumes/candidates` | Get all parsed candidates | Yes |
 | GET | `/api/matches/:jobId` | Calculate and return ranked candidates | Yes |
+| **Candidate Routes** | | | |
+| POST | `/api/candidate/upload` | Upload resume for personal ATS scan | Yes |
+| GET | `/api/candidate/history` | Get scan history | Yes |
+| GET | `/api/candidate/analysis/:id`| Get specific analysis report | Yes |
 
 ## Key Highlights
 

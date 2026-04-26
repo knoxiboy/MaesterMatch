@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-const Dashboard = () => {
+const RecruiterDashboard = () => {
   const { user } = useAuth();
   const [jobs, setJobs] = useState([]);
   const [candidates, setCandidates] = useState([]);
@@ -149,4 +149,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default RecruiterDashboard;

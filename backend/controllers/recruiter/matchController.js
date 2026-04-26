@@ -1,5 +1,5 @@
-const Job = require("../models/Job");
-const Candidate = require("../models/Candidate");
+const Job = require("../../models/recruiter/Job");
+const Candidate = require("../../models/recruiter/Candidate");
 
 // Helper function to calculate match percentage
 const calculateMatchScore = (candidateSkills, requiredSkills) => {

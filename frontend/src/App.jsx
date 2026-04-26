@@ -1,13 +1,13 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
-import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import Dashboard from "./pages/Dashboard";
-import CreateJob from "./pages/CreateJob";
-import UploadResume from "./pages/UploadResume";
-import MatchResults from "./pages/MatchResults";
+import Navbar from "./components/shared/Navbar";
+import Home from "./pages/shared/Home";
+import Login from "./pages/shared/Login";
+import Signup from "./pages/shared/Signup";
+import RecruiterDashboard from "./pages/recruiter/RecruiterDashboard";
+import CreateJob from "./pages/recruiter/CreateJob";
+import UploadResume from "./pages/recruiter/UploadResume";
+import MatchResults from "./pages/recruiter/MatchResults";
 import CandidateDashboard from "./pages/candidate/CandidateDashboard";
 import CandidateUpload from "./pages/candidate/CandidateUpload";
 import AnalysisReport from "./pages/candidate/AnalysisReport";
@@ -21,7 +21,7 @@ const PrivateRoute = ({ children, allowedRoles }) => {
   if (!user) return <Navigate to="/login" />;
   
   if (allowedRoles && !allowedRoles.includes(user.role)) {
-    return <Navigate to={user.role === "candidate" ? "/candidate-dashboard" : "/dashboard"} />;
+    return <Navigate to={user.role === "candidate" ? "/candidate/dashboard" : "/dashboard"} />;
   }
   
   return children;
@@ -40,7 +40,7 @@ function App() {
             path="/dashboard" 
             element={
               <PrivateRoute allowedRoles={["recruiter"]}>
-                <Dashboard />
+                <RecruiterDashboard />
               </PrivateRoute>
             } 
           />
@@ -70,7 +70,7 @@ function App() {
           />
           {/* Candidate Routes */}
           <Route 
-            path="/candidate-dashboard" 
+            path="/candidate/dashboard" 
             element={
               <PrivateRoute allowedRoles={["candidate"]}>
                 <CandidateDashboard />

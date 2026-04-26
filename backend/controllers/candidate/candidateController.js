@@ -1,6 +1,6 @@
-const ResumeAnalysis = require("../models/ResumeAnalysis");
-const { extractText } = require("../services/parserService");
-const { analyzeResume } = require("../services/analysisService");
+const ResumeAnalysis = require("../../models/candidate/ResumeAnalysis");
+const { extractText } = require("../../services/candidate/parserService");
+const { analyzeResume } = require("../../services/candidate/analysisService");
 const fs = require("fs");
 
 /**

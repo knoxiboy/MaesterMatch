@@ -1,11 +1,11 @@
 const express = require("express");
-const { getJobMatches } = require("../controllers/matchController");
-const authMiddleware = require("../middleware/authMiddleware");
+const { getJobMatches } = require("../../controllers/recruiter/matchController");
+const auth = require("../../middleware/authMiddleware");
 
 const router = express.Router();
 
 // Apply protect middleware to all match routes
-router.use(authMiddleware);
+router.use(auth);
 
 router.route("/:jobId").get(getJobMatches);
 
