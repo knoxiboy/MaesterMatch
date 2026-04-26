@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require("multer");
 const path = require("path");
 const { uploadAndAnalyze, getHistory, getAnalysisDetail } = require("../controllers/candidateController");
-const auth = require("../middleware/auth");
+const auth = require("../middleware/authMiddleware");
 
 // Configure Multer for resume uploads
 const storage = multer.diskStorage({
