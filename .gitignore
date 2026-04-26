@@ -29,5 +29,5 @@ npm-debug.log*
 # Coverage
 coverage/
 
-# Project Reports (local only, not tracked in git)
-project-reports/
+# Project Reports
+# project-reports/ is now tracked to ensure documentation is available in the repository
