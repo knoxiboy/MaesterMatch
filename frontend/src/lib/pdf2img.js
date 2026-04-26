@@ -17,81 +17,49 @@ async function loadPdfJs() {
     return loadPromise;
 }
 
-export async function convertPdfToImage(file) {
+export async function convertPdfToImages(file) {
     try {
         const lib = await loadPdfJs();
-
         const arrayBuffer = await file.arrayBuffer();
         const pdf = await lib.getDocument({ data: arrayBuffer }).promise;
-        const page = await pdf.getPage(1);
+        
+        const images = [];
+        let fullText = "";
 
-        const viewport = page.getViewport({ scale: 4 });
-        const canvas = document.createElement("canvas");
-        const context = canvas.getContext("2d");
+        // Process all pages
+        for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            
+            // Extract text
+            const textContent = await page.getTextContent();
+            const pageText = textContent.items.map((item) => item.str).join(" ");
+            fullText += pageText + "\n";
 
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
-
-        if (context) {
-            context.imageSmoothingEnabled = true;
-            context.imageSmoothingQuality = "high";
+            // Render to image (only first 3 pages to save tokens/memory if large)
+            if (i <= 3) {
+                const viewport = page.getViewport({ scale: 2 });
+                const canvas = document.createElement("canvas");
+                const context = canvas.getContext("2d");
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+                await page.render({ canvasContext: context, viewport }).promise;
+                images.push(canvas.toDataURL("image/png"));
+            }
         }
 
-        await page.render({ canvasContext: context, viewport }).promise;
-
-        return new Promise((resolve) => {
-            canvas.toBlob(
-                (blob) => {
-                    if (blob) {
-                        const originalName = file.name.replace(/\.pdf$/i, "");
-                        const imageFile = new File([blob], `${originalName}.png`, {
-                            type: "image/png",
-                        });
-
-                        resolve({
-                            imageUrl: URL.createObjectURL(blob),
-                            file: imageFile,
-                        });
-                    } else {
-                        resolve({
-                            imageUrl: "",
-                            file: null,
-                            error: "Failed to create image blob",
-                        });
-                    }
-                },
-                "image/png",
-                1.0
-            );
-        });
-    } catch (err) {
         return {
-            imageUrl: "",
-            file: null,
-            error: `Failed to convert PDF: ${err}`,
+            images,
+            text: fullText.trim()
         };
+    } catch (err) {
+        console.error("PDF processing failed:", err);
+        throw err;
     }
 }
 
 export async function extractTextFromPdf(file) {
-    try {
-        const lib = await loadPdfJs();
-        const arrayBuffer = await file.arrayBuffer();
-        const pdf = await lib.getDocument({ data: arrayBuffer }).promise;
-        
-        let fullText = "";
-        for (let i = 1; i <= pdf.numPages; i++) {
-            const page = await pdf.getPage(i);
-            const textContent = await page.getTextContent();
-            const pageText = textContent.items
-                .map((item) => item.str)
-                .join(" ");
-            fullText += pageText + "\n";
-        }
-        
-        return fullText.trim();
-    } catch (err) {
-        console.error("Text extraction failed:", err);
-        return "";
-    }
+    // Keep this as a helper if needed elsewhere
+    const result = await convertPdfToImages(file);
+    return result.text;
 }
+

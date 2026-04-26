@@ -5,4 +5,11 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  server: {
+    proxy: {
+      '/auth': 'http://localhost:5000',
+      '/jobs': 'http://localhost:5000',
+      '/resumes': 'http://localhost:5000',
+    }
+  }
 })

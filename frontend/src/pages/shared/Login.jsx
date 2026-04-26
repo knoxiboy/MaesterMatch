@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { cn } from "../../lib/utils";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -21,52 +22,65 @@ const Login = () => {
   };
 
   return (
-    <div className="container page-wrapper flex items-center justify-center">
-      <div className="glass-card" style={{ maxWidth: "450px", width: "100%" }}>
-        <div className="text-center mb-4">
-          <h2>Welcome Back</h2>
-          <p>Login to your account to continue</p>
+    <div className="min-h-screen flex items-center justify-center pt-24 pb-12 px-6 bg-dark-950 relative overflow-hidden">
+      {/* Background Glow */}
+      <div className="absolute top-1/4 -left-1/4 size-[500px] bg-primary-500/10 blur-[120px] rounded-full" />
+      <div className="absolute bottom-1/4 -right-1/4 size-[500px] bg-indigo-500/10 blur-[120px] rounded-full" />
+
+      <div className="w-full max-w-md relative z-10 animate-in fade-in zoom-in duration-700">
+        <div className="glass-card p-10 space-y-8">
+          <div className="text-center space-y-2">
+            <div className="size-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-6">
+              <img src="/favicon.svg" alt="Logo" className="size-8" />
+            </div>
+            <h1 className="text-3xl font-black text-white tracking-tight">Welcome Back</h1>
+            <p className="text-gray-400 font-medium">Login to your premium assessment portal</p>
+          </div>
+
+          {error && (
+            <div className="p-4 bg-rose-500/10 border border-rose-500/20 rounded-2xl text-rose-400 text-sm font-bold flex items-center gap-3 animate-in shake-2">
+              <div className="size-1.5 rounded-full bg-rose-500" />
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-1">Email Address</label>
+              <input
+                type="email"
+                className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500/50 transition-all placeholder:text-gray-600 font-medium"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                placeholder="name@example.com"
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <div className="flex justify-between items-center px-1">
+                <label className="text-[10px] font-black uppercase tracking-widest text-gray-500">Password</label>
+                <Link to="#" className="text-[10px] font-black uppercase tracking-widest text-primary-400 hover:text-primary-300 transition-colors">Forgot?</Link>
+              </div>
+              <input
+                type="password"
+                className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500/50 transition-all placeholder:text-gray-600 font-medium"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                placeholder="••••••••"
+              />
+            </div>
+
+            <button type="submit" className="primary-button w-full py-4 text-sm tracking-wide">
+              Sign In
+            </button>
+          </form>
+
+          <p className="text-center text-gray-500 text-sm font-medium pt-4 border-t border-white/5">
+            Don't have an account? <Link to="/signup" className="text-primary-400 font-bold hover:text-primary-300 transition-colors">Create one</Link>
+          </p>
         </div>
-
-        {error && (
-          <div style={{ padding: "0.75rem", background: "rgba(239, 68, 68, 0.1)", color: "#f87171", borderRadius: "0.5rem", marginBottom: "1.5rem", border: "1px solid rgba(239, 68, 68, 0.2)" }}>
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label className="form-label">Email Address</label>
-            <input
-              type="email"
-              className="form-control"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              placeholder="you@company.com"
-            />
-          </div>
-          
-          <div className="form-group">
-            <label className="form-label">Password</label>
-            <input
-              type="password"
-              className="form-control"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder="••••••••"
-            />
-          </div>
-
-          <button type="submit" className="btn btn-primary" style={{ width: "100%", marginTop: "1rem" }}>
-            Sign In
-          </button>
-        </form>
-
-        <p className="text-center mt-4" style={{ fontSize: "0.9rem" }}>
-          Don't have an account? <Link to="/signup">Sign up here</Link>
-        </p>
       </div>
     </div>
   );

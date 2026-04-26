@@ -1,122 +1,122 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import FileUploader from '../../components/candidate/FileUploader';
+import { Sparkles, Building2, Briefcase, FileSearch } from 'lucide-react';
 
 const CandidateUpload = () => {
-  const [file, setFile] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
+    const navigate = useNavigate();
+    const [metadata, setMetadata] = useState({
+        companyName: '',
+        jobTitle: '',
+        jobDescription: ''
+    });
 
-  const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    if (selectedFile) {
-      const fileType = selectedFile.type;
-      if (fileType === "application/pdf" || 
-          fileType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
-          selectedFile.name.endsWith(".docx")) {
-        setFile(selectedFile);
-        setError("");
-      } else {
-        setFile(null);
-        setError("Please upload a PDF or DOCX file.");
-      }
-    }
-  };
+    const handleComplete = (analysis) => {
+        navigate('/candidate/dashboard');
+    };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!file) {
-      setError("Please select a file first.");
-      return;
-    }
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setMetadata(prev => ({ ...prev, [name]: value }));
+    };
 
-    const formData = new FormData();
-    formData.append("resume", file);
+    return (
+        <div className="min-h-screen pt-32 pb-20 px-6">
+            <div className="max-w-4xl mx-auto space-y-16">
+                {/* Header */}
+                <div className="space-y-6 text-center animate-in fade-in slide-in-from-bottom-8 duration-700">
+                    <div className="flex justify-center">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-500/10 border border-primary-500/20 text-primary-400 text-xs font-black uppercase tracking-widest shadow-2xl shadow-primary-500/10">
+                            <Sparkles className="size-3" />
+                            Next-Gen AI Analysis
+                        </div>
+                    </div>
+                    
+                    <h1 className="text-6xl md:text-7xl font-black text-white tracking-tighter leading-tight">
+                        Perfect your <span className="text-gradient">resume.</span>
+                    </h1>
+                    
+                    <p className="text-gray-400 text-lg md:text-xl font-medium max-w-2xl mx-auto leading-relaxed opacity-80">
+                        Specify the role you're targeting and let our elite AI model benchmark your skills against global standards.
+                    </p>
+                </div>
 
-    setLoading(true);
-    setError("");
+                {/* Form & Uploader Section */}
+                <div className="grid md:grid-cols-2 gap-8 animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-200">
+                    {/* Role Context Form */}
+                    <div className="glass-card p-8 space-y-6">
+                        <h2 className="text-xl font-black text-white tracking-tight flex items-center gap-3">
+                            <Briefcase className="size-5 text-primary-400" />
+                            Role Context
+                        </h2>
 
-    try {
-      const res = await axios.post("/candidate/upload", formData, {
-        headers: { "Content-Type": "multipart/form-data" }
-      });
-      navigate(`/candidate/analysis/${res.data.analysis._id}`);
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to upload resume");
-    } finally {
-      setLoading(false);
-    }
-  };
+                        <div className="space-y-4">
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-1">Target Company</label>
+                                <div className="relative group">
+                                    <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-gray-500 group-focus-within:text-primary-400 transition-colors" />
+                                    <input 
+                                        type="text"
+                                        name="companyName"
+                                        value={metadata.companyName}
+                                        onChange={handleInputChange}
+                                        placeholder="e.g. Google, Stripe, Netflix"
+                                        className="w-full bg-white/2 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-white placeholder:text-gray-600 focus:outline-none focus:border-primary-500/50 focus:bg-white/5 transition-all"
+                                    />
+                                </div>
+                            </div>
 
-  return (
-    <div className="container page-wrapper flex flex-col items-center">
-      <div className="glass-card w-full max-w-2xl">
-        <h2 className="text-3xl font-bold mb-4 text-center">ATS Resume Scanner</h2>
-        <p className="text-gray-400 text-center mb-8">
-          Upload your resume in PDF or DOCX format. Our AI-powered engine will analyze it against standard ATS criteria.
-        </p>
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-1">Job Title</label>
+                                <div className="relative group">
+                                    <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-gray-500 group-focus-within:text-primary-400 transition-colors" />
+                                    <input 
+                                        type="text"
+                                        name="jobTitle"
+                                        value={metadata.jobTitle}
+                                        onChange={handleInputChange}
+                                        placeholder="e.g. Senior Frontend Engineer"
+                                        className="w-full bg-white/2 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-white placeholder:text-gray-600 focus:outline-none focus:border-primary-500/50 focus:bg-white/5 transition-all"
+                                    />
+                                </div>
+                            </div>
 
-        {error && (
-          <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl mb-6 text-center">
-            {error}
-          </div>
-        )}
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-1">Job Description (Optional)</label>
+                                <div className="relative group">
+                                    <FileSearch className="absolute left-4 top-5 size-4 text-gray-500 group-focus-within:text-primary-400 transition-colors" />
+                                    <textarea 
+                                        name="jobDescription"
+                                        value={metadata.jobDescription}
+                                        onChange={handleInputChange}
+                                        placeholder="Paste the job description here for a hyper-targeted analysis..."
+                                        rows={4}
+                                        className="w-full bg-white/2 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-white placeholder:text-gray-600 focus:outline-none focus:border-primary-500/50 focus:bg-white/5 transition-all resize-none"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-8">
-            <label 
-              htmlFor="resume-upload"
-              className="group border-2 border-dashed border-gray-700 rounded-3xl p-12 flex flex-col items-center justify-center cursor-pointer hover:border-primary transition-all bg-white/5"
-            >
-              <div className="p-4 bg-primary/10 rounded-full mb-4 transform group-hover:scale-110 transition-transform duration-300">
-                <svg className="w-10 h-10 text-primary group-hover:animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                </svg>
-              </div>
-              <span className="text-lg font-semibold mb-1">
-                {file ? file.name : "Click to upload or drag and drop"}
-              </span>
-              <div className="flex gap-3 mt-4">
-                <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-md text-xs text-gray-400 font-bold uppercase tracking-widest">PDF</span>
-                <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-md text-xs text-gray-400 font-bold uppercase tracking-widest">DOCX</span>
-              </div>
-              <input 
-                id="resume-upload"
-                type="file" 
-                className="hidden" 
-                onChange={handleFileChange}
-                accept=".pdf,.docx"
-              />
-            </label>
-          </div>
+                    {/* Uploader */}
+                    <div className="flex flex-col justify-center">
+                        <FileUploader onComplete={handleComplete} metadata={metadata} />
+                    </div>
+                </div>
 
-          <button 
-            type="submit" 
-            className="btn btn-primary w-full py-4 text-lg font-bold"
-            disabled={!file || loading}
-          >
-            {loading ? "Analyzing Resume..." : "Scan My Resume"}
-          </button>
-        </form>
-
-        <div className="mt-10 pt-8 border-t border-gray-800 grid grid-cols-3 gap-4 text-center">
-          <div>
-            <p className="text-primary font-bold text-lg">99%</p>
-            <p className="text-xs text-gray-500">Accuracy</p>
-          </div>
-          <div>
-            <p className="text-primary font-bold text-lg">Fast</p>
-            <p className="text-xs text-gray-500">Analysis</p>
-          </div>
-          <div>
-            <p className="text-primary font-bold text-lg">Detailed</p>
-            <p className="text-xs text-gray-500">Feedback</p>
-          </div>
+                {/* Trust Footer */}
+                <div className="pt-20 border-t border-white/5 opacity-40 grayscale transition-all hover:opacity-100 hover:grayscale-0 duration-700 text-center">
+                    <p className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 mb-8">Trusted by talent at</p>
+                    <div className="flex flex-wrap justify-center gap-x-12 gap-y-8 text-white font-black text-xl opacity-30">
+                        <span>GOOGLE</span>
+                        <span>NETFLIX</span>
+                        <span>STRIPE</span>
+                        <span>AIRBNB</span>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default CandidateUpload;
