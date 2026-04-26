@@ -48,4 +48,4 @@ This component is the culmination of the project.
 
 ## Conclusion
 
-The MERN Full-Stack Resume Parser & Matching Engine is now structurally complete. It demonstrates complex file handling, data extraction, relational data modeling, custom algorithmic logic, and a modern, secure, responsive React frontend.
+The **MaesterMatch** platform is now structurally complete. It demonstrates complex file handling, data extraction, relational data modeling, custom algorithmic logic, and a modern, secure, responsive React frontend.
