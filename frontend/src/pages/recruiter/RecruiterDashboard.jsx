@@ -77,7 +77,7 @@ const RecruiterDashboard = () => {
             </Link>
             <Link to="/upload" className="flex items-center gap-2 px-6 py-3 bg-primary-600 border border-primary-500 rounded-2xl text-white font-black text-sm hover:bg-primary-500 transition-all shadow-xl shadow-primary-500/20">
               <Upload className="size-4" />
-              Bulk Upload
+              Resume Upload
             </Link>
           </div>
         </div>
