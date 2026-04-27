@@ -4,6 +4,7 @@
 
 const path = require("path");
 const multer = require("multer");
+const os = require("os");
 const Candidate = require("../../models/recruiter/Candidate");
 const { parseResume } = require("../../services/recruiter/resumeParser");
 
@@ -13,8 +14,9 @@ const { parseResume } = require("../../services/recruiter/resumeParser");
 
 const storage = multer.diskStorage({
   // Set the destination folder for uploaded files
+  // Using os.tmpdir() for compatibility with serverless environments like Vercel
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "../../uploads"));
+    cb(null, os.tmpdir());
   },
 
   // Generate a unique file name to avoid collisions
@@ -81,8 +83,19 @@ const uploadResume = async (req, res) => {
       candidate: candidate,
     });
   } catch (error) {
-    console.error("Resume upload error:", error.message);
-    res.status(500).json({ message: "Error processing resume: " + error.message });
+    console.error("Resume upload error DETAILS:", {
+      message: error.message,
+      stack: error.stack,
+      file: req.file ? {
+        path: req.file.path,
+        mimetype: req.file.mimetype,
+        size: req.file.size
+      } : "No file"
+    });
+    res.status(500).json({ 
+      message: "Error processing resume", 
+      details: error.message 
+    });
   }
 };
 
